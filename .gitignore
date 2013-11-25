@@ -1,0 +1,10 @@
+ /node_modules/*
+*.iml
+/.idea
+/out
+
+/log
+
+/node_modules/docpad-plugin-minicms/node_modules/.bin
+
+/node_modules/docpad-plugin-minicms/node_modules/coffeecup/node_modules/.bin
