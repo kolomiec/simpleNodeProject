@@ -6,7 +6,7 @@ var handle = {}
 handle["/"] = requestHandlers.index;
 handle["/index"] = requestHandlers.index;
 handle["/createPost"] = requestHandlers.createPost;
-handle["/showPost"] = requestHandlers.showPost;
-//handle["/showPosts"] = requestHandlers.shshowPostsow;
+handle["/showPosts"] = requestHandlers.showPosts;
+handle["/showPostDetails"] = requestHandlers.showPostDetails;
 
 server.start(router.route, handle);
