@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div><a style="margin: 20px" href="/index">Crate Post</a><a style="margin: 20px" href="/showPosts">Show Posts</a></div>
+<form action="/editPost?fileName={{postHeader}}" method="post">
+    <div>
+        Post header
+    </div>
+    <div>
+        <input type="text" name="postHeader" value="{{postHeader}}" />
+    </div>
+    <div>
+        Post Body
+    </div>
+    <div>
+        <textarea name="postBody" rows="20" cols="60" >{{postBody}}</textarea>
+    </div>
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+</form>
+
+</body>
+</html>

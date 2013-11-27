@@ -1,11 +1,31 @@
 <html>
 <head>
+    <script src="/public/javascripts/jquery-2.0.3.min.js"></script>
     <meta charset="utf-8">
     <title>Posts</title>
 </head>
 <body>
+<div><a style="margin: 20px" href="/index">Crate Post</a><a style="margin: 20px" href="/showPosts">Show Posts</a></div>
+    {{#content}}
+        <div style="color: red"><h1>You don't have posts</h1></div>
+        <a href="/index">Create new post</a>
+    {{/content}}
     {{#postsHeader}}
-    <a href="/showPostDetails?fileName={{header}}"><b>{{header}}</b></a><br>
+    <div>
+        <h1 style="display: inline;"><a href="/showPostDetails?fileName={{header}}"><b>{{header}}</b></a></h1>
+        <a href="/removePost?fileName={{header}}">remove</a>
+        <a href="/editPost?fileName={{header}}">edit</a>
+    </div>
     {{/postsHeader}}
+    <!--<script>-->
+        <!--$("span").click(function() {-->
+            <!--$.ajax({-->
+                <!--url: '/removePost',-->
+                <!--type: 'post',-->
+                <!--dataType: 'json',-->
+                <!--data: {"fileName": $($(this)[0]).attr("id")}-->
+            <!--});-->
+        <!--})-->
+    <!--</script>-->
 </body>
 </html>

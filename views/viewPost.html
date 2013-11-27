@@ -3,8 +3,14 @@
 <head>
     <title></title>
 </head>
+<div><a style="margin: 20px" href="/index">Crate Post</a><a style="margin: 20px" href="/showPosts">Show Posts</a></div>
 <body>
-    <div>{{postHeader}}</div>
-    <div>{{postBody}}</div>
+    <a href="/editPost?fileName={{postHeader}}">edit</a>
+    <div>
+        Title: {{postHeader}}
+    </div>
+    <div>
+        Body: {{postBody}}
+    </div>
 </body>
 </html>

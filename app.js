@@ -8,5 +8,8 @@ handle["/index"] = requestHandlers.index;
 handle["/createPost"] = requestHandlers.createPost;
 handle["/showPosts"] = requestHandlers.showPosts;
 handle["/showPostDetails"] = requestHandlers.showPostDetails;
+handle["/removePost"] = requestHandlers.removePost;
+handle["/editPost"] = requestHandlers.editPost;
+
 
 server.start(router.route, handle);
