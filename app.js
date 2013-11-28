@@ -12,4 +12,4 @@ handle["/removePost"] = requestHandlers.removePost;
 handle["/editPost"] = requestHandlers.editPost;
 
 
-server.start(router.route, handle);
+server.start();

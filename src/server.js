@@ -1,23 +1,52 @@
 var http = require("http");
-var url = require("url");
-var index;
+var express = require("express");
+var cons = require('consolidate');
+var fs = require("fs");
 
-function start(route, handle) {
+var app = express();
+var dir = '/home/sergeykolomie/tmp/';
 
+function start() {
 
-    function onRequest(request, response) {
-        var pathname = url.parse(request.url).pathname;
-        console.log("Request for " + pathname + " received.");
-        route(handle, pathname, request, response);
+    app.configure(function(){
+        app.set('port', process.env.PORT || 8888);
+        app.set('view engine', 'html');
+        app.engine('html', cons.mustache);
 
-//        console.log("Request received.");
-//        response.writeHead(200, {"Content-Type": "text/html"});
-//        response.write(index);
-//        response.end();
-    }
+        app.use(express.bodyParser());
+        app.use(app.router);
+        app.use(express.static(__dirname + '/public'));
+    })
 
-    http.createServer(onRequest).listen(8888);
-    console.log("Server has started.");
+    app.get("/", function(req, res) {
+        res.render('index', {});
+    })
+
+    app.get("/index", function(req, res) {
+        res.redirect("/");
+    })
+
+    app.post("/createPost", function(req, res) {
+        var postHeader = req.body.postHeader;
+        var postBody = req.body.postBody;
+        var jsonData = {postsHeader: postBody};
+
+        var outputFilename = dir+postHeader.replace(/[^a-z0-9]/gi, '').toLowerCase()+'.json';
+        fs.writeFile(outputFilename, jsonData, function(err) {
+            if(err) {
+                console.log(err);
+            }
+        });
+        res.redirect("/");
+    })
+
+    app.get("/*", function(req, res) {
+        res.redirect("/");
+    })
+
+    http.createServer(app).listen(app.get('port'), function(){
+        console.log("Express server listening on port " + app.get('port'))
+    })
 }
 
 exports.start = start;

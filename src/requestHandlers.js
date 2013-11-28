@@ -10,49 +10,7 @@ var exec = require("child_process").exec;
 
 var dir = '/home/sergeykolomie/tmp/';
 
-function getHTML(viewName, request, response) {
-    var viewPath = "./views/"+viewName;
-    fs.readFile(viewPath, function (err, data) {
-        if (err) {
-            throw err;
-        }
-        response.writeHead(200, {"Content-Type": "text/html"});
-        response.write(data);
-        response.end();
-    });
-}
 
-function index(request, response) {
-    getHTML("index.html", request, response)
-}
-
-function createPost(request, response) {
-    var postData = "";
-    var jsonData = ""
-    var postHeader = ""
-
-    request.addListener("data", function(postDataChunk) {
-        postData += postDataChunk;
-    });
-
-    request.on('end', function () {
-        jsonData = JSON.stringify(querystring.parse(postData));
-        postHeader = querystring.parse(postData).postHeader;
-
-        var outputFilename = dir+postHeader.replace(/[^a-z0-9]/gi, '').toLowerCase()+'.json';
-        fs.writeFile(outputFilename, jsonData, function(err) {
-            if(err) {
-                console.log(err);
-            }
-        });
-    });
-
-    response.writeHead(302, {
-        'Location': '/index'
-    });
-    response.end();
-
-}
 
 function showPosts(request, response) {
     var postsHeaders = {
