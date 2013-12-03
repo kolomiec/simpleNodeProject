@@ -11,7 +11,6 @@ var exec = require("child_process").exec;
 var dir = '/home/sergeykolomie/tmp/';
 
 
-
 function showPosts(request, response) {
     var postsHeaders = {
         postsHeader: []
@@ -154,11 +153,3 @@ function editPost(request, response) {
 
 }
 
-
-
-exports.index = index;
-exports.createPost = createPost;
-exports.showPosts = showPosts;
-exports.showPostDetails = showPostDetails;
-exports.removePost = removePost;
-exports.editPost = editPost;

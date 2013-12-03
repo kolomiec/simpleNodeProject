@@ -1,0 +1,15 @@
+---
+title: "Welcome"
+layout: "index"
+---
+Hello
+<ul>
+    <% for post in @getFilesAtPath('posts').toJSON(): %>
+    <li><a href="<%= post.url %>">
+        <%= post.title %>
+    </a></li>
+    <% end %>
+</ul>
+
+
+<a href="/create.html"> Create </a>
