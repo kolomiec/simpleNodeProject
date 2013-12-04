@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Poster</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/css/bootstrap.css"/>
+
+    <script type="text/javascript" src="/javascripts/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="/javascripts/underscore-min.js"></script>
+    <script type="text/javascript" src="/javascripts/backbone-min.js"></script>
+    <script type="text/javascript" src="/javascripts/main.js"></script>
+
+    <script type="text/template" id="post">
+        <span class="post-header">Post header: <strong><%= postHeader%></strong></span> <br>
+        <p>Post body: <i><%= postBody%></i></p>
+        <div>
+            <a href="#edit" class="btn btn-info edit-post">Edit</a>
+            <a href="#delete" class="btn btn-danger delete-post">Delete</a>
+        </div>
+        <hr>
+    </script>
+</head>
+<body>
+    <div class="nav nav-pills offset4">
+        <li class="create active">
+            <a href="#create">Crate Post</a>
+        </li>
+
+        <li><a class="show-posts" href="#showPosts">Show Posts</a></li>
+    </div>
+    <div class="container">
+    </div>
+</body>
+</html>

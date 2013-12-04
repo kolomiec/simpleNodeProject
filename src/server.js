@@ -10,6 +10,12 @@ var dir = '/home/sergeykolomie/tmp/';
 
 function start() {
 
+    function getHTML(path) {
+        fs.readFile(path, function (err, htmlContent) {
+            return htmlContent;
+        })
+    }
+
     app.configure(function(){
         app.set('port', process.env.PORT || 8888);
         app.set('view engine', 'html');
@@ -18,15 +24,77 @@ function start() {
         app.use(express.bodyParser());
         app.use(app.router);
 
-        app.use(express.static(__dirname + '/public'));
+        app.use(express.static(__dirname + '/../public'));
     })
 
     app.get("/", function(req, res) {
-        res.render('index', {});
+        res.render('base', {});
     })
 
     app.get("/index", function(req, res) {
         res.redirect("/");
+    })
+
+    app.get("/createForm", function(req, res) {
+        res.render("1.html")
+    })
+
+    app.get("/getPosts", function(req, res) {
+        var posts = [];
+        var counter = 0;
+        Step(
+            function readFile() {
+                fs.readdir(dir, this);
+            },
+            function bb(err, files) {
+                if (err) {
+                    counter++;
+                    renderAllPosts()
+                } else {
+                    if (files.length == 0) {
+                        counter++;
+                        renderAllPosts();
+                    }
+                    files.forEach( function(file) {
+                        counter++;
+                        fs.readFile(dir+file,'utf-8',function( err, content){
+                            if (err) throw err;
+                            posts.push(JSON.parse(content));
+                            renderAllPosts();
+                        });
+                    });
+                }
+            }
+        );
+
+        function renderAllPosts() {
+            counter--;
+            if (counter == 0) {
+                res.send(posts)
+            }
+        }
+    })
+
+    app.get("/delete", function(req, res) {
+        var param = req.param("fileName");
+        var fileName = param.replace(/[^a-z0-9]/gi, '').toLowerCase()+".json"
+        fs.unlink(dir+fileName, function (err) {
+            if (err) {
+                res.redirect('/index');
+            }
+            console.log('successfully deleted'+dir+fileName);
+        });
+
+        res.redirect('/getPosts');
+    })
+
+    app.get("/edit", function(req, res) {
+        var param = req.param("fileName");
+        var file = param.replace(/[^a-z0-9]/gi, '').toLowerCase()+".json"
+        var postDetails = ""
+        fs.readFile(dir+file,'utf-8',function( err, details){
+            res.json(JSON.parse(details));
+        })
     })
 
     app.post("/createPost", function(req, res) {
@@ -153,9 +221,9 @@ function start() {
 
 
 
-    app.get("/*", function(req, res) {
-        res.redirect("/");
-    })
+//    app.get("/*", function(req, res) {
+//        res.redirect("/");
+//    })
 
     http.createServer(app).listen(app.get('port'), function(){
         console.log("Express server listening on port " + app.get('port'))
