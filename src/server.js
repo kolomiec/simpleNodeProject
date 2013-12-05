@@ -80,12 +80,11 @@ function start() {
         var fileName = param.replace(/[^a-z0-9]/gi, '').toLowerCase()+".json"
         fs.unlink(dir+fileName, function (err) {
             if (err) {
-                res.redirect('/index');
+                res.end();
             }
             console.log('successfully deleted'+dir+fileName);
+            res.end();
         });
-
-        res.redirect('/getPosts');
     })
 
     app.get("/edit", function(req, res) {
@@ -95,6 +94,32 @@ function start() {
         fs.readFile(dir+file,'utf-8',function( err, details){
             res.json(JSON.parse(details));
         })
+    })
+
+    app.post("/edit", function(req, res) {
+        var param = req.body.fileName;
+        var fileName = param.replace(/[^a-z0-9]/gi, '').toLowerCase()+".json"
+        fs.unlink(dir+fileName, function (err) {
+            if (err) {
+                console.log('can\'t deleted'+dir+fileName + " " + err.toString());
+            } else{
+                console.log('successfully deleted'+dir+fileName);
+            }
+        });
+
+        var postHeader = req.body.postHeader;
+        var postBody = req.body.postBody;
+        var jsonData = {postHeader: postHeader, postBody: postBody};
+
+        var outputFilename = dir+postHeader.replace(/[^a-z0-9]/gi, '').toLowerCase()+'.json';
+        fs.writeFile(outputFilename, JSON.stringify(jsonData), function(err) {
+            if(err) {
+                console.log(err);
+                res.end();
+            } else {
+                res.end();
+            }
+        });
     })
 
     app.post("/createPost", function(req, res) {

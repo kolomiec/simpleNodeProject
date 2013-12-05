@@ -9,15 +9,52 @@
     <script type="text/javascript" src="/javascripts/backbone-min.js"></script>
     <script type="text/javascript" src="/javascripts/main.js"></script>
 
+    <style type="text/css">
+        .short-body {
+            display:inline-block;
+            width:300px;
+            white-space: nowrap;
+            overflow:hidden !important;
+            text-overflow: ellipsis;
+            margin-bottom: -5px;
+        }
+
+    </style>
+
     <script type="text/template" id="post">
-        <span class="post-header">Post header: <strong><%= postHeader%></strong></span> <br>
-        <p>Post body: <i><%= postBody%></i></p>
+        <strong>Post header: </strong><span class="post-header"><%= postHeader%></span> <br>
+        <p><strong>Post body:</strong> <span class="short-body"><%= postBody%></span></p>
         <div>
-            <a href="#edit" class="btn btn-info edit-post">Edit</a>
-            <a href="#delete" class="btn btn-danger delete-post">Delete</a>
+            <button class="btn btn-info review-post">Review</button>
+            <button class="btn btn-warning edit-post">Edit</button>
+            <button class="btn btn-danger delete-post">Delete</button>
         </div>
         <hr>
     </script>
+
+    <script type="text/template" id="error-page">
+        <div class="btn btn-info">
+            <a class="show-posts" href="#showPosts"><strong>Bad link</strong></a>
+        </div>
+    <script>
+
+    <script type="text/template" id="post-edit">
+        <span class="post-header"><h4>Post header:</h4></span>
+        <input type="text" name="postHeader" style="width: 500px" value="<%= postHeader%>" le />
+        <h4>Post body:</h4>
+        <div>
+            <textarea name="postBody" rows="20" cols="60" ><%= postBody%></textarea>
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-primary back">Back</button>
+            <button class="btn btn-danger delete-post">Delete</button>
+            <button class="btn btn-success save-post">Save</button>
+        </div>
+    </script>
+
+
+
 </head>
 <body>
     <div class="nav nav-pills offset4">

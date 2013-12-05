@@ -25,11 +25,10 @@ $(function(){
 
     function displayPostDetails(data) {
         var postView = new PostView({model: data});
-        console.log(postView);
-        console.log("123123");
-        console.log(postView.el);
-//        $("body .container").empty();
-//        $("body .container").append(postView.el);
+        postView.template = _.template( $("#post-edit").html() );
+        postView.render();
+        $("body .container").empty();
+        $("body .container").append(postView.el);
     };
 
     var Post = Backbone.Model.extend({});
@@ -47,7 +46,9 @@ $(function(){
 
         render: function() {
             this.collection.each(function(post) {
-                var postView = new PostView({model: post});
+                var postView = new PostView({model: post.toJSON()});
+                postView.template = _.template( $("#post").html() );
+                postView.render();
                 this.$el.append(postView.el);
             }, this);
         }
@@ -56,46 +57,77 @@ $(function(){
 
     var PostView = Backbone.View.extend({
         tagName: 'div',
-        template: _.template( $("#post").html()),
-
-        initialize: function() {
-            this.render();
-        },
 
         render: function() {
-            this.$el.html( this.template(this.model.toJSON()) )
+            this.$el.html( this.template(this.model) )
         },
         events: {
             'click .edit-post': 'editPost',
-            'click .delete-post': 'deletePost'
+            'click .delete-post': 'deletePost',
+            'click .save-post': 'savePost',
+            'click .back': 'showPosts',
+            'click .review-post': 'reviewPost'
         },
         editPost: function() {
             $.ajax({
                 url: "/edit",
-                data: { fileName: this.$el.find('span strong').text() }
+                data: { fileName: this.$el.find('.post-header').text() }
             }).done(function(data){
-
+                displayPostDetails(data);
             })
         },
 
         deletePost: function() {
             $.ajax({
                 url: "/delete",
-                data: { fileName: this.$el.find('span strong').text() }
+                data: { fileName: this.$el.find('.post-header').text() }
             }).done(function(data){
-                    displayPostDetails(data);
+                displayPosts();
             })
+        },
+
+        savePost: function() {
+            $.ajax({
+                type: "POST",
+                url: "/edit",
+                data: { fileName: this.$el.find('input').val(), postHeader: this.$el.find('input').val(), postBody: this.$el.find('textarea').val()}
+            }).done(function(data){
+                displayPosts();
+            })
+        },
+
+        showPosts: function() {
+            displayPosts();
+        },
+
+        reviewPost: function() {
+
         }
     });
 
+    var Router = Backbone.Router.extend({
+        routes: {
+            '': 'home',
+            'create': 'home',
+            'showPosts': 'showPosts',
+            '*xyz': 'showError'
+        }
+    })
 
-    $(".create").click(function(){
+    var router = new Router();
+    router.on('route:home', function(){
         getPostCreateForm();
     });
 
-    $(".show-posts").click(function(){
+    router.on('route:showPosts', function(){
         displayPosts();
     });
 
-    getPostCreateForm();
+    router.on('route:showError', function(data){
+        $("body .container").empty();
+        $("body .container").append($("#error-page").html());
+    });
+
+    Backbone.history.start();
+
 });
