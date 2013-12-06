@@ -4,11 +4,15 @@ var cons = require('consolidate');
 var fs = require("fs");
 var Step = require('step');
 var Mustache = require('mustache');
+var Post = require('../src/dbModels/Post.js')
+var mongoose = require('mongoose');
 
 var app = express();
 var dir = '/home/sergeykolomie/tmp/';
 
 function start() {
+
+
 
     function getHTML(path) {
         fs.readFile(path, function (err, htmlContent) {
@@ -35,8 +39,39 @@ function start() {
         res.redirect("/");
     })
 
+    app.post('/save', function(req, res){
+        var post = new Post({
+            postHeader: req.body.postHeader,
+            postBody: req.body.postBody
+        });
+
+        post.save(function (err) {
+            if (!err) {
+                console.log("post created");
+                res.redirect("/");
+            } else {
+                console.log(err);
+                if(err.name == 'ValidationError') {
+                    res.statusCode = 400;
+                    res.send({ error: 'Validation error' });
+                } else {
+                    res.statusCode = 500;
+                    res.send({ error: 'Server error' });
+                }
+            }
+        });
+    })
+
+    app.get('', function(req, res) {
+
+    })
+
+
+
+
+
     app.get("/createForm", function(req, res) {
-        res.render("1.html")
+        res.render("createForm.html")
     })
 
     app.get("/getPosts", function(req, res) {
